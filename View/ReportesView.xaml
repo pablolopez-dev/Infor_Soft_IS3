@@ -1,0 +1,86 @@
+﻿<Window x:Class="Infor_Soft_WPF.View.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Generar Reporte" Height="700" Width="700"
+        WindowStartupLocation="CenterScreen">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30" Background="White">
+            <TextBlock Text="Seleccione el tipo de resolución:" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+
+            <ComboBox x:Name="comboTipo" SelectionChanged="comboTipo_SelectionChanged" Height="30">
+                <ComboBoxItem Content="Providencia"/>
+                <ComboBoxItem Content="A.I."/>
+                <ComboBoxItem Content="S.D."/>
+                <ComboBoxItem Content="Oficio Comisivo"/>
+            </ComboBox>
+
+            <TextBlock Text="Subopciones:" FontSize="16" FontWeight="SemiBold" Margin="0,20,0,5"/>
+            <ListBox x:Name="listaSubopciones" Height="100" SelectionChanged="listaSubopciones_SelectionChanged"/>
+
+            <TextBlock Text="Sub-subopciones:" FontSize="16" FontWeight="SemiBold" Margin="0,20,0,5"
+                       Visibility="{Binding ElementName=listaSubSubopciones, Path=Visibility}"/>
+            <ListBox x:Name="listaSubSubopciones" Height="100" Visibility="Collapsed"/>
+
+            <!-- ComboBox para Adherido / No Adherido -->
+            <StackPanel x:Name="panelAdherido" Visibility="Collapsed" Margin="0,20,0,0">
+                <TextBlock Text="¿Tipo de entrega?" FontSize="16" FontWeight="SemiBold"/>
+                <ComboBox x:Name="comboAdherido" SelectionChanged="comboAdherido_SelectionChanged" Height="30">
+                    <ComboBoxItem Content="Adherido Portón"/>
+                    <ComboBoxItem Content="Adherido Puerta"/>
+                    <ComboBoxItem Content="Recibió sin especificar Hombre"/>
+                    <ComboBoxItem Content="Recibió sin especificar Mujer"/>
+                    <ComboBoxItem Content="No Adherido"/>
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Campos de entrada normales -->
+            <StackPanel x:Name="panelCamposNormales" Visibility="Collapsed" Margin="0,20,0,0">
+                <TextBlock Text="Campos de Resolución" FontSize="16" FontWeight="SemiBold"/>
+
+                <Label Content="Fecha"/>
+                <TextBox x:Name="fechaTextBox" Margin="0,5"/>
+
+                <Label Content="Mes"/>
+                <TextBox x:Name="mesTextBox" Margin="0,5"/>
+
+                <Label Content="Año"/>
+                <TextBox x:Name="anoTextBox" Margin="0,5"/>
+
+                <Label Content="Horas"/>
+                <TextBox x:Name="horasTextBox" Margin="0,5"/>
+
+                <Label Content="Minutos"/>
+                <TextBox x:Name="minutosTextBox" Margin="0,5"/>
+
+                <Label Content="Demandado/a"/>
+                <TextBox x:Name="demandadoTextBox" Margin="0,5"/>
+
+                <Label Content="Domicilio"/>
+                <TextBox x:Name="domicilioTextBox" Margin="0,5"/>
+            </StackPanel>
+
+            <!-- Campos adicionales para 'No Adherido' -->
+            <StackPanel x:Name="panelCamposAdicionales" Visibility="Collapsed" Margin="0,10,0,0">
+                <TextBlock Text="Campos adicionales para 'No Adherido'" FontSize="16" FontWeight="SemiBold"/>
+
+                <Label Content="Recibió"/>
+                <TextBox x:Name="recibidoTextBox" Margin="0,5"/>
+
+                <Label Content="Parentesco"/>
+                <TextBox x:Name="parentescoTextBox" Margin="0,5"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <TextBlock Text="¿Firmó?" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <ComboBox x:Name="firmaComboBox" Width="120">
+                        <ComboBoxItem Content="Sí firmó"/>
+                        <ComboBoxItem Content="No firmó"/>
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+
+            <Button Content="Generar Reporte" Height="35" Margin="0,30,0,0"
+                    Background="#FFC107" Foreground="Black" FontWeight="Bold"
+                    Click="GenerarReporte_Click"/>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
