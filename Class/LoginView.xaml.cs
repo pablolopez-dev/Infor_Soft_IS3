@@ -44,8 +44,14 @@ namespace Infor_Soft_WPF.View
 
             if (username == "admin" && password == "1234")  // Ejemplo de validación simple
             {
-                MessageBox.Show("Inicio de sesión exitoso", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Aquí puedes abrir otra ventana o cambiar de vista
+
+                //Abrir el dashboard
+                MainWindow dashboard = new MainWindow();
+             
+                dashboard.Show();  // Mostrar la ventana ReportesView
+
+                // Cerrar la ventana de inicio de sesión
+                this.Close();
             }
             else
             {
