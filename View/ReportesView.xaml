@@ -4,10 +4,110 @@
         Title="Generar Reporte"
         Height="750" Width="700"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="None"
-        ResizeMode="NoResize"
-        AllowsTransparency="True"
-        Background="Transparent">
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResize"
+        AllowsTransparency="False"
+        Background="Transparent"
+        SizeToContent="WidthAndHeight">
+
+    <Window.Resources>
+        <!-- Estilo para TextBox -->
+        <Style x:Key="BonitoTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="6" ShadowDepth="0" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#007ACC"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Estilo para ComboBox -->
+        <Style x:Key="BonitoComboBox" TargetType="ComboBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="6" ShadowDepth="0" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8">
+                            <Grid>
+                                <ToggleButton Name="ToggleButton"
+                                          Grid.Column="2"
+                                          Focusable="false"
+                                          ClickMode="Press"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <ContentPresenter Name="ContentSite"
+                                              IsHitTestVisible="False"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              Margin="6,3,25,3"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"/>
+                                <Popup Name="Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                    <Grid Name="DropDown"
+                                      SnapsToDevicePixels="True"
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="200"
+                                      Background="White">
+                                        <ScrollViewer Margin="4,6,4,6"
+                                                  SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="#007ACC"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
 
     <Border CornerRadius="12"
             BorderThickness="2"
@@ -29,74 +129,52 @@
 
         <Grid>
 
-            <!-- Botones de Minimizar y Cerrar -->
-            <Grid HorizontalAlignment="Right"
-      VerticalAlignment="Top"
-      Margin="0,10,10,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="25"/>
-                    <ColumnDefinition Width="25"/>
-                </Grid.ColumnDefinitions>
 
-                <!-- Botón Minimizar -->
-                <Button x:Name="btnMinimize"
-            Grid.Column="0"
-            Content="—"
-            Width="25"
-            Height="25"
-            Foreground="Black"
-            BorderBrush="Transparent"
-            Click="btnMinimize_Click">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="#FFEDAF28"/>
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#278BEF"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled">
 
-                <!-- Botón Cerrar -->
-                <Button x:Name="btnClose"
-            Grid.Column="1"
-            Content="✕"
-            Width="25"
-            Height="25"
-            Foreground="Black"
-            BorderBrush="Transparent"
-            Click="btnClose_Click">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="#EF2727"/>
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#FFEDAF28"/>
-                                    <!-- Rojo al pasar el mouse -->
-                                    <Setter Property="Foreground" Value="White"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-            </Grid>
-
-
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Right" Width="696">
-
-                <StackPanel Margin="50">
+                <StackPanel Margin="20" HorizontalAlignment="Stretch">
 
                     <!-- Título -->
+                    <Button Content="⟵ Volver a Inicio"
+        Width="100"
+        Height="30"
+        FontSize="16"
+        FontWeight="Bold"
+        Foreground="White"
+        Background="#BF6408"
+        BorderBrush="#BF6408"
+        BorderThickness="0"
+        Cursor="Hand"
+        HorizontalAlignment="left"
+        Margin="0,-5,20,0"
+        Click="BtnVolver_Click">
+                        <Button.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.3"/>
+                        </Button.Effect>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="10"
+                                BorderThickness="0">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="10,5"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
-                    <TextBlock Text="Generar Reporte"
+                    <TextBlock Text="Informes"
                                FontSize="26"
                                FontWeight="Bold"
                                Foreground="White"
-                               Margin="0,0,0,30"
+                               Margin="260,-30,0,30"
                                FontFamily="Montserrat"/>
 
                     <!-- ComboBox tipo resolución -->
@@ -177,138 +255,97 @@
 
                     <!-- Campos normales -->
                     <StackPanel x:Name="panelCamposNormales"
-                                Visibility="Collapsed"
-                                Margin="0,20,0,0">
+                        Visibility="Collapsed"
+                        Margin="0,20,0,0">
                         <TextBlock Text="Campos de Resolución"
-                                   FontSize="16"
-                                   FontWeight="SemiBold"
-                                   Foreground="LightGray"
-                                   FontFamily="Montserrat"
-                                   Margin="0,0,0,10"/>
-                        <Label Content="Fecha"
-                               Foreground="DarkGray"
-                               FontFamily="Montserrat"/>
-                        <TextBox x:Name="fechaTextBox"
-                                 Height="35"
-                                 Padding="10"
-                                 Background="White"
-                                 BorderBrush="#ccc"
-                                 Margin="0,5,0,10"
-                                 FontFamily="Montserrat"/>
-                        <Label Content="Mes"
-                               Foreground="DarkGray"
-                               FontFamily="Montserrat"/>
-                        <TextBox x:Name="mesTextBox"
-                                 Height="35"
-                                 Padding="10"
-                                 Background="White"
-                                 BorderBrush="#ccc"
-                                 Margin="0,5,0,10"
-                                 FontFamily="Montserrat"/>
-                        <Label Content="Año"
-                               Foreground="DarkGray"
-                               FontFamily="Montserrat"/>
-                        <TextBox x:Name="anoTextBox"
-                                 Height="35"
-                                 Padding="10"
-                                 Background="White"
-                                 BorderBrush="#ccc"
-                                 Margin="0,5,0,10"
-                                 FontFamily="Montserrat"/>
-                        <Label Content="Horas"
-                               Foreground="DarkGray"
-                               FontFamily="Montserrat"/>
-                        <TextBox x:Name="horasTextBox"
-                                 Height="35"
-                                 Padding="10"
-                                 Background="White"
-                                 BorderBrush="#ccc"
-                                 Margin="0,5,0,10"
-                                 FontFamily="Montserrat"/>
-                        <Label Content="Minutos"
-                               Foreground="DarkGray"
-                               FontFamily="Montserrat"/>
-                        <TextBox x:Name="minutosTextBox"
-                                 Height="35"
-                                 Padding="10"
-                                 Background="White"
-                                 BorderBrush="#ccc"
-                                 Margin="0,5,0,10"
-                                 FontFamily="Montserrat"/>
-                        <Label Content="Demandado/a"
-                               Foreground="DarkGray"
-                               FontFamily="Montserrat"/>
-                        <TextBox x:Name="demandadoTextBox"
-                                 Height="35"
-                                 Padding="10"
-                                 Background="White"
-                                 BorderBrush="#ccc"
-                                 Margin="0,5,0,10"
-                                 FontFamily="Montserrat"/>
-                        <Label Content="Domicilio"
-                               Foreground="DarkGray"
-                               FontFamily="Montserrat"/>
-                        <TextBox x:Name="domicilioTextBox"
-                                 Height="35"
-                                 Padding="10"
-                                 Background="White"
-                                 BorderBrush="#ccc"
-                                 Margin="0,5,0,10"
-                                 FontFamily="Montserrat"/>
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Foreground="LightGray"
+                           FontFamily="Montserrat"
+                           Margin="0,0,0,10"/>
+
+                        <WrapPanel ItemHeight="80" ItemWidth="300" Margin="0,0,0,10">
+                            <!-- Fecha -->
+                            <StackPanel Margin="10">
+                                <Label Content="Fecha" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <TextBox x:Name="fechaTextBox" Style="{StaticResource BonitoTextBox}" FontFamily="Montserrat"/>
+                            </StackPanel>
+
+                            <!-- Mes -->
+                            <StackPanel Margin="10">
+                                <Label Content="Mes" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <TextBox x:Name="mesTextBox" Style="{StaticResource BonitoTextBox}" FontFamily="Montserrat"/>
+                            </StackPanel>
+
+                            <!-- Año -->
+                            <StackPanel Margin="10">
+                                <Label Content="Año" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <TextBox x:Name="anoTextBox" Style="{StaticResource BonitoTextBox}" FontFamily="Montserrat"/>
+                            </StackPanel>
+
+                            <!-- Horas -->
+                            <StackPanel Margin="10">
+                                <Label Content="Horas" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <TextBox x:Name="horasTextBox" Style="{StaticResource BonitoTextBox}" FontFamily="Montserrat"/>
+                            </StackPanel>
+
+                            <!-- Minutos -->
+                            <StackPanel Margin="10">
+                                <Label Content="Minutos" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <TextBox x:Name="minutosTextBox" Style="{StaticResource BonitoTextBox}" FontFamily="Montserrat"/>
+                            </StackPanel>
+
+                            <!-- Demandado -->
+                            <StackPanel Margin="10">
+                                <Label Content="Demandado/a" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <TextBox x:Name="demandadoTextBox" Style="{StaticResource BonitoTextBox}" FontFamily="Montserrat"/>
+                            </StackPanel>
+
+                            <!-- Domicilio -->
+                            <StackPanel Margin="10">
+                                <Label Content="Domicilio" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <TextBox x:Name="domicilioTextBox" Style="{StaticResource BonitoTextBox}" FontFamily="Montserrat"/>
+                            </StackPanel>
+                        </WrapPanel>
                     </StackPanel>
 
                     <!-- Campos adicionales -->
                     <StackPanel x:Name="panelCamposAdicionales"
-                                Visibility="Collapsed"
-                                Margin="0,20,0,0">
-                        <TextBlock Text=""
-                                   FontSize="16"
-                                   FontWeight="SemiBold"
-                                   Foreground="LightGray"
-                                   FontFamily="Montserrat"
-                                   Margin="0,0,0,10"/>
-                        <Label Content="Recibió"
-                               Foreground="DarkGray"
-                               FontFamily="Montserrat"/>
-                        <TextBox x:Name="recibidoTextBox"
-                                 Height="35"
-                                 Padding="10"
-                                 Background="White"
-                                 BorderBrush="#ccc"
-                                 Margin="0,5,0,10"
-                                 FontFamily="Montserrat"/>
-                        <Label Content="Parentesco"
-                               Foreground="DarkGray"
-                               FontFamily="Montserrat"/>
-                        <TextBox x:Name="parentescoTextBox"
-                                 Height="35"
-                                 Padding="10"
-                                 Background="White"
-                                 BorderBrush="#ccc"
-                                 Margin="0,5,0,10"
-                                 FontFamily="Montserrat"/>
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="0,5">
-                            <TextBlock Text="¿Firmó?"
-                                       VerticalAlignment="Center"
-                                       Foreground="DarkGray"
-                                       Margin="0,0,10,0"
-                                       FontFamily="Montserrat"/>
-                            <ComboBox x:Name="firmaComboBox"
-                                      Width="150"
-                                      Height="35"
-                                      Padding="10"
-                                      Background="White"
-                                      BorderBrush="#ccc"
-                                      FontFamily="Montserrat">
-                                <ComboBoxItem Content="Sí firmó"/>
-                                <ComboBoxItem Content="No firmó"/>
-                            </ComboBox>
-                        </StackPanel>
-                    </StackPanel>
+                        Visibility="Collapsed"
+                        Margin="0,20,0,0">
+                        <TextBlock Text="Datos Adicionales"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Foreground="LightGray"
+                           FontFamily="Montserrat"
+                           Margin="0,0,0,10"/>
 
+                        <WrapPanel ItemHeight="80" ItemWidth="300" Margin="0,0,0,10">
+                            <!-- Recibió -->
+                            <StackPanel Margin="10">
+                                <Label Content="Recibió" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <TextBox x:Name="recibidoTextBox" Style="{StaticResource BonitoTextBox}" FontFamily="Montserrat"/>
+                            </StackPanel>
+
+                            <!-- Parentesco -->
+                            <StackPanel Margin="10">
+                                <Label Content="Parentesco" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <TextBox x:Name="parentescoTextBox" Style="{StaticResource BonitoTextBox}" FontFamily="Montserrat"/>
+                            </StackPanel>
+
+                            <!-- Firma -->
+                            <StackPanel Margin="10">
+                                <Label Content="¿Firmó?" Foreground="DarkGray" FontFamily="Montserrat"/>
+                                <ComboBox x:Name="firmaComboBox" Style="{StaticResource BonitoComboBox}" FontFamily="Montserrat">
+                                    <ComboBoxItem Content="Sí firmó"/>
+                                    <ComboBoxItem Content="No firmó"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </WrapPanel>
+                    </StackPanel>
                     <!-- Botón generar -->
-                    <Button Content="Generar Reporte"
+                    <Button x:Name="btnGenerarReporte"
+                            Content="Generar Reporte"
                             Height="45"
                             Margin="0,30,0,0"
                             Background="#FFBF6408"
@@ -317,7 +354,7 @@
                             BorderBrush="#BF6408"
                             BorderThickness="1"
                             Cursor="Hand"
-                            FontSize="16"
+                            FontSize="11"
                             FontFamily="Montserrat"
                             Click="btnGenerarReporte_Click">
                         <Button.Style>
@@ -341,6 +378,53 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+                    <!-- Botón guardar en base de datos -->
+                    <Button x:Name="btnGuardarEnBD"
+        Content="Guardar en BD"
+        Height="45"
+        Margin="0,15,0,0"
+        Background="#FFBF6408"
+        Foreground="White"
+        FontWeight="Bold"
+        BorderBrush="#BF6408"
+        BorderThickness="1"
+        Cursor="Hand"
+        FontSize="11"
+        FontFamily="Montserrat"
+        Click="btnGuardarEnBD_Click"
+        IsEnabled="False">
+                        <!-- Deshabilitado al inicio -->
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#FFBF6408"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#28AEED"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="120" Height="40"
+                    CornerRadius="20"
+                    Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <CheckBox x:Name="saltoPaginaCheckBox"
+          Content="Agregar en el mismo documento."
+          Checked="saltoPaginaCheckBox_Checked"
+          Unchecked="saltoPaginaCheckBox_Unchecked"
+          FontSize="14"
+          Margin="0,20,0,0"
+          FontFamily="Montserrat"
+          Foreground="White"
+          HorizontalAlignment="Center"/>
+
 
                 </StackPanel>
             </ScrollViewer>

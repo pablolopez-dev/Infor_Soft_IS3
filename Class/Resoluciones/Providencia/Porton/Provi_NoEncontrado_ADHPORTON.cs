@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Infor_Soft_WPF
+namespace Infor_Soft_WPF.Class.Resoluciones.Providencia.Porton
 {
     public static class Provi_NoEncontrado_ADHPORTON
     {

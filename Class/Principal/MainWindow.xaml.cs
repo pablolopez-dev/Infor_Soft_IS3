@@ -21,22 +21,30 @@ namespace Infor_Soft_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private string _usuarioActual;
+        private int _idUsuarioActual; // Cambiar a int (no string)
+
+        public MainWindow(string usuarioLogueado, int idUsuarioLogueado)
         {
             InitializeComponent();
+            _usuarioActual = usuarioLogueado;
+            _idUsuarioActual = idUsuarioLogueado;  // Falta punto y coma aquí
         }
+
         private void Reportes_Click(object sender, RoutedEventArgs e)
         {
-            Window1 ventana = new Window1();
+            Window1 ventana = new Window1(_usuarioActual, _idUsuarioActual); // Corregir paréntesis y tipo
             ventana.Show();
-            // Cerrar la ventana
             this.Close();
         }
+
 
         private void CerrarSesion_Click(object sender, RoutedEventArgs e)
         {
             // Lógica para cerrar sesión
-            Application.Current.Shutdown(); // O abrir ventana de login
+            LoginView login = new LoginView();
+            login.Show();
+            this.Close(); // Cierra la ventana actual
         }
 
         private void Minimizar_Click(object sender, RoutedEventArgs e)

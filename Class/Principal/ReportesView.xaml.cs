@@ -1,6 +1,12 @@
-﻿using Infor_Soft_WPF.Helpers;
+﻿using Infor_Soft_WPF.Class.BD;
+using Infor_Soft_WPF.Class.Repositorios;
+using Infor_Soft_WPF.Class.Resoluciones.Providencia.Porton;
+using Infor_Soft_WPF.Class.Resoluciones.Providencia.Puerta;
+using Infor_Soft_WPF.Helpers;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Intrinsics.X86;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,9 +41,14 @@ namespace Infor_Soft_WPF.View
             { "Oficio Comisivo", new() { "Con traslado", "Sin traslado", "No encontrado" } }
         };
 
-        public Window1()
+        private string _usuarioActual;
+        private int _idUsuarioActual;
+
+        public Window1(string usuarioLogueado, int idUsuarioLogueado)
         {
             InitializeComponent();
+            _usuarioActual = usuarioLogueado;
+            _idUsuarioActual = idUsuarioLogueado;
             InicializarPlantillas();
             listaSubSubopciones.SelectionChanged += listaSubSubopciones_SelectionChanged;
         }
@@ -54,7 +65,7 @@ namespace Infor_Soft_WPF.View
 
                 //Adherido Porton
                 [new OpcionReporte("Providencia", "Con traslado", "Adherido Porton")] = () =>
-                    Infor_Soft_WPF.Provi_ConTraslado_ADHPORTON.GenerarInforme(
+                    Provi_ConTraslado_ADHPORTON.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -62,7 +73,7 @@ namespace Infor_Soft_WPF.View
               
                 //Adherido Porton
                 [new OpcionReporte("Providencia", "Sin traslado", "Adherido Porton")] = () =>
-                    Infor_Soft_WPF.Provi_SinTraslado_ADHPORTON.GenerarInforme(
+                    Provi_SinTraslado_ADHPORTON.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -71,7 +82,7 @@ namespace Infor_Soft_WPF.View
                
                 //No encontrado
                 [new OpcionReporte("Providencia", "No encontrado")] = () =>
-                    Infor_Soft_WPF.Provi_NoEncontrado_ADHPORTON.GenerarInforme(
+                    Provi_NoEncontrado_ADHPORTON.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -86,7 +97,7 @@ namespace Infor_Soft_WPF.View
 
                 //Adherido PUERTA
                 [new OpcionReporte("Providencia", "Con traslado", "Adherido Puerta")] = () =>
-                    Infor_Soft_WPF.Provi_ConTraslado_ADHPUERTA.GenerarInforme(
+                    Provi_ConTraslado_ADHPUERTA.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -94,7 +105,7 @@ namespace Infor_Soft_WPF.View
 
                 //Adherido PUERTA
                 [new OpcionReporte("Providencia", "Sin traslado", "Adherido Puerta")] = () =>
-                    Infor_Soft_WPF.Provi_SinTraslado_ADHPUERTA.GenerarInforme(
+                    Provi_SinTraslado_ADHPUERTA.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -103,7 +114,7 @@ namespace Infor_Soft_WPF.View
 
                 //No encontrado
                 [new OpcionReporte("Providencia", "No encontrado")] = () =>
-                    Infor_Soft_WPF.Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
+                    Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -133,7 +144,7 @@ namespace Infor_Soft_WPF.View
 
                 //No encontrado
                 [new OpcionReporte("Providencia", "No encontrado")] = () =>
-                    Infor_Soft_WPF.Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
+                    Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -162,7 +173,7 @@ namespace Infor_Soft_WPF.View
 
                 //No encontrado
                 [new OpcionReporte("Providencia", "No encontrado")] = () =>
-                    Infor_Soft_WPF.Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
+                    Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -340,7 +351,7 @@ namespace Infor_Soft_WPF.View
 
                 //No encontrado
                 [new OpcionReporte("Oficio Comisivo", "No encontrado")] = () =>
-                    Infor_Soft_WPF.Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
+                    Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -378,7 +389,7 @@ namespace Infor_Soft_WPF.View
 
                 //No encontrado
                 [new OpcionReporte("Oficio Comisivo", "No encontrado")] = () =>
-                    Infor_Soft_WPF.Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
+                    Provi_NoEncontrado_ADHPUERTA.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
                         demandadoTextBox.Text, domicilioTextBox.Text
@@ -601,11 +612,14 @@ namespace Infor_Soft_WPF.View
 
 
 
+
+
         private void btnGenerarReporte_Click(object sender, RoutedEventArgs e)
         {
             string tipo = (comboTipo.SelectedItem as ComboBoxItem)?.Content?.ToString();
             string subopcion = listaSubopciones.SelectedItem?.ToString();
             string subSubopcion = listaSubSubopciones.SelectedItem?.ToString();
+
 
             if (string.IsNullOrEmpty(tipo))
             {
@@ -691,22 +705,143 @@ namespace Infor_Soft_WPF.View
                 string reporte = generador();
 
                 var palabrasEnNegrita = new List<string>
-        {
-            demandadoTextBox.Text,
-            recibidoTextBox.Text,
-            domicilioTextBox.Text,
-            parentescoTextBox.Text,
-        };
+                {
+                    demandadoTextBox.Text,
+                    recibidoTextBox.Text,
+                    domicilioTextBox.Text,
+                    parentescoTextBox.Text,
+                };
 
-                WordDocumentHelper.CrearDocumento(reporte, palabrasEnNegrita);
+                bool agregarSalto = saltoPaginaCheckBox.IsChecked == true;
+                WordDocumentHelper.CrearDocumento(reporte, palabrasEnNegrita, agregarSalto);
             }
             else
             {
                 MessageBox.Show("La combinación seleccionada no tiene una plantilla definida.",
                                 "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+
+            btnGuardarEnBD.IsEnabled = true;
+
+
         }
 
+
+        private int ObtenerIdUsuarioActual()
+        {
+            int idUsuario = -1;
+
+            try
+            {
+                using (var db = new BD_CONN())
+                {
+                    var conn = db.GetConnection();
+                    db.OpenConnection();
+
+                    string query = "SELECT id_usuario FROM usuarios WHERE usuario = @nombreUsuario";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@nombreUsuario", _usuarioActual);
+
+                        var result = cmd.ExecuteScalar();
+                        if (result != null && int.TryParse(result.ToString(), out int id))
+                        {
+                            idUsuario = id;
+                        }
+                    }
+
+                    db.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener el ID del usuario actual: " + ex.Message);
+            }
+
+            return idUsuario;
+        }
+
+
+
+
+
+
+
+
+
+
+        private void btnGuardarEnBD_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // 1. Crear la copia temporal para guardar
+                string rutaDocumento = WordDocumentHelper.CrearCopiaParaBD();
+
+                // 2. Liberar recursos COM para evitar bloqueo del archivo
+                WordDocumentHelper.ReiniciarDocumento();
+
+                // 3. Validar existencia del archivo temporal
+                if (string.IsNullOrEmpty(rutaDocumento) || !File.Exists(rutaDocumento))
+                {
+                    MessageBox.Show("No se encontró el documento para guardar.");
+                    return;
+                }
+
+                // 4. Leer el archivo como bytes
+                byte[] archivoBytes = File.ReadAllBytes(rutaDocumento);
+                string nombreArchivo = Path.GetFileName(rutaDocumento);
+                DateTime fechaCreacion = DateTime.Now;
+                TimeSpan horaCreacion = DateTime.Now.TimeOfDay;
+
+                // 5. Obtener id del usuario actual
+                int idUsuario = ObtenerIdUsuarioActual();
+                string usuarioNombre = _usuarioActual;
+
+                // 6. Guardar en la BD usando tu repositorio
+                var repo = new InformeRepositorio();
+                if (repo.GuardarInforme(nombreArchivo, archivoBytes, idUsuario, usuarioNombre, fechaCreacion, horaCreacion, out string error))
+                {
+                    MessageBox.Show("Documento guardado exitosamente.");
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar el documento: " + error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al guardar el documento: " + ex.Message);
+            }
+        }
+
+
+
+
+
+        private void saltoPaginaCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (btnGenerarReporte != null)
+            {
+                btnGenerarReporte.Content = "Agregar al documento";
+            }
+        }
+
+        private void saltoPaginaCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (btnGenerarReporte != null)
+            {
+                btnGenerarReporte.Content = "Generar Reporte";
+            }
+        }
+
+
+        private void BtnVolver_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow main = new MainWindow(_usuarioActual, _idUsuarioActual);
+            main.Show();
+            this.Close(); // Cierra la ventana actual
+        }
 
 
         private void btnMinimize_Click(object sender, RoutedEventArgs e)
