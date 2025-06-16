@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infor_Soft_WPF.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Intrinsics.X86;
 using System.Windows;
@@ -170,6 +171,14 @@ namespace Infor_Soft_WPF.View
 
 
 
+
+
+
+
+
+//-------------------------------FIRMAS PROVIDENCIAS-------------//----------------------------------------------------
+
+
                 // No Adherido - Sí firmó (NO él mismo)
                 [new OpcionReporte("Providencia", "Con traslado", "No Adherido - Sí firmó")] = () =>
                     Infor_Soft_WPF.Provi_ConTraslado_NOADHERIDO_SI_FIRMA.GenerarInforme(
@@ -211,13 +220,55 @@ namespace Infor_Soft_WPF.View
 
 
 
+                // No Adherido - Sí firmó (NO él mismo)
+                [new OpcionReporte("Providencia", "Sin traslado", "No Adherido - Sí firmó")] = () =>
+                    Infor_Soft_WPF.Provi_ConTraslado_NOADHERIDO_SI_FIRMA.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
 
-                            //-------------------------- //---------------------------------------------//-----------------------------------//----------------------------------------
+                // No Adherido - Sí firmó (ÉL MISMO)
+                [new OpcionReporte("Providencia", "Sin traslado", "No Adherido - Sí firmó (él mismo)")] = () =>
+                    Infor_Soft_WPF.Provi_ConTraslado_NOADHERIDO_SI_FIRMA_ELMISMO.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
 
-                            //PARA LA RESOLUCION Oficio Comisivo -- PORTON
+                // No Adherido - No firmó (NO él mismo)
+                [new OpcionReporte("Providencia", "Sin traslado", "No Adherido - No firmó")] = () =>
+                    Infor_Soft_WPF.Provi_ConTraslado_NOADHERIDO_NOFIRMA.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
 
-                            //Adherido Porton
-                            [new OpcionReporte("Oficio Comisivo", "Con traslado", "Adherido Porton")] = () =>
+
+                // No Adherido - No firmó (ÉL MISMO)
+                [new OpcionReporte("Providencia", "Sin traslado", "No Adherido - No firmó (él mismo)")] = () =>
+                    Infor_Soft_WPF.Provi_ConTraslado_NOADHERIDO_NOFIRMA_elmismo.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
+
+
+
+
+
+
+
+                //-------------------------- //---------------------------------------------//-----------------------------------//----------------------------------------
+
+                //PARA LA RESOLUCION Oficio Comisivo -- PORTON
+
+                //Adherido Porton
+                [new OpcionReporte("Oficio Comisivo", "Con traslado", "Adherido Porton")] = () =>
                     Infor_Soft_WPF.OficioComi_ConTraslado_ADHPORTON.GenerarInforme(
                         fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
                         horasTextBox.Text, minutosTextBox.Text,
@@ -333,6 +384,77 @@ namespace Infor_Soft_WPF.View
                         demandadoTextBox.Text, domicilioTextBox.Text
                     ),
 
+
+
+                //----------------------FIRMAS OFICIO COMISIVO---------------------------//----------------------------------
+
+                // No Adherido - Sí firmó (NO él mismo)
+                [new OpcionReporte("Oficio Comisivo", "Con traslado", "No Adherido - Sí firmó")] = () =>
+                    Infor_Soft_WPF.OF_ConTraslado_NOADHERIDO_SI_FIRMA.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
+
+                // No Adherido - Sí firmó (ÉL MISMO)
+                [new OpcionReporte("Oficio Comisivo", "Con traslado", "No Adherido - Sí firmó (él mismo)")] = () =>
+                    Infor_Soft_WPF.OF_ConTraslado_NOADHERIDO_SI_FIRMA_ELMISMO.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
+
+                // No Adherido - No firmó (NO él mismo)
+                [new OpcionReporte("Oficio Comisivo", "Con traslado", "No Adherido - No firmó")] = () =>
+                    Infor_Soft_WPF.OF_ConTraslado_NOADHERIDO_NOFIRMA.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
+
+                // No Adherido - No firmó (ÉL MISMO)
+                [new OpcionReporte("Oficio Comisivo", "Con traslado", "No Adherido - No firmó (él mismo)")] = () =>
+                    Infor_Soft_WPF.OF_ConTraslado_NOADHERIDO_NOFIRMA_elmismo.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
+
+
+
+
+
+
+                // No Adherido - Sí firmó (NO él mismo)
+                [new OpcionReporte("Oficio Comisivo", "Sin traslado", "No Adherido - Sí firmó")] = () =>
+                    Infor_Soft_WPF.OF_ConTraslado_NOADHERIDO_SI_FIRMA.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
+
+                // No Adherido - Sí firmó (ÉL MISMO)
+                [new OpcionReporte("Oficio Comisivo", "Sin traslado", "No Adherido - Sí firmó (él mismo)")] = () =>
+                    Infor_Soft_WPF.OF_ConTraslado_NOADHERIDO_SI_FIRMA_ELMISMO.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
+
+                // No Adherido - No firmó (NO él mismo)
+                [new OpcionReporte("Oficio Comisivo", "Sin traslado", "No Adherido - No firmó")] = () =>
+                    Infor_Soft_WPF.OF_ConTraslado_NOADHERIDO_NOFIRMA.GenerarInforme(
+                        fechaTextBox.Text, mesTextBox.Text, anoTextBox.Text,
+                        horasTextBox.Text, minutosTextBox.Text,
+                        demandadoTextBox.Text, domicilioTextBox.Text,
+                        recibidoTextBox.Text, parentescoTextBox.Text
+                    ),
 
 
 
@@ -478,6 +600,7 @@ namespace Infor_Soft_WPF.View
 
 
 
+
         private void btnGenerarReporte_Click(object sender, RoutedEventArgs e)
         {
             string tipo = (comboTipo.SelectedItem as ComboBoxItem)?.Content?.ToString();
@@ -491,10 +614,8 @@ namespace Infor_Soft_WPF.View
                 return;
             }
 
-           
-
-
             OpcionReporte clave;
+
             if (tipo == "Providencia" && subopcion == "No encontrado")
             {
                 clave = new OpcionReporte(tipo, subopcion); // solo tipo y subopción
@@ -522,8 +643,19 @@ namespace Infor_Soft_WPF.View
                 clave = new OpcionReporte(tipo, subopcion, subSubopcion);
             }
 
+            // Lista de sub-subopciones que requieren validación especial
+            var subSubOpcionesQueRequierenValidacion = new List<string>
+    {
+        "No Adherido"
+    };
 
-            if (tipo == "Providencia" && subopcion == "Con traslado" && subSubopcion == "No Adherido")
+            // Validación especial solo para ciertos casos
+            bool requiereValidacionEspecial =
+                (tipo == "Providencia" || tipo == "Oficio Comisivo") &&
+                (subopcion == "Con traslado" || subopcion == "Sin traslado") &&
+                subSubOpcionesQueRequierenValidacion.Contains(subSubopcion);
+
+            if (requiereValidacionEspecial)
             {
                 if (string.IsNullOrWhiteSpace(recibidoTextBox.Text) || string.IsNullOrWhiteSpace(parentescoTextBox.Text))
                 {
@@ -554,20 +686,19 @@ namespace Infor_Soft_WPF.View
                 }
             }
 
-
-
-
-
-
-
-
-
-
-
             if (plantillaMap.TryGetValue(clave, out var generador))
             {
                 string reporte = generador();
-                Infor_Soft_WPF.Helpers.WordDocumentHelper.CrearDocumento(reporte);
+
+                var palabrasEnNegrita = new List<string>
+        {
+            demandadoTextBox.Text,
+            recibidoTextBox.Text,
+            domicilioTextBox.Text,
+            parentescoTextBox.Text,
+        };
+
+                WordDocumentHelper.CrearDocumento(reporte, palabrasEnNegrita);
             }
             else
             {
@@ -575,6 +706,7 @@ namespace Infor_Soft_WPF.View
                                 "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
+
 
 
         private void btnMinimize_Click(object sender, RoutedEventArgs e)
