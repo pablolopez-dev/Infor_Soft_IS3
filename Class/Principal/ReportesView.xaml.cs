@@ -11,7 +11,8 @@ using System.Runtime.Intrinsics.X86;
 using System.Windows;
 using System.Windows.Controls;
 using Word = Microsoft.Office.Interop.Word;
-
+using Infor_Soft_WPF.View; // Asegúrate de tener esta referencia
+using Infor_Soft_WPF.Class.Entidades;
 
 namespace Infor_Soft_WPF.View
 {
@@ -43,6 +44,9 @@ namespace Infor_Soft_WPF.View
 
         private string _usuarioActual;
         private int _idUsuarioActual;
+
+        public Abogado AbogadoSeleccionado { get; private set; }
+        public string TituloDocumento { get; private set; }
 
         public Window1(string usuarioLogueado, int idUsuarioLogueado)
         {
@@ -773,45 +777,62 @@ namespace Infor_Soft_WPF.View
 
         private void btnGuardarEnBD_Click(object sender, RoutedEventArgs e)
         {
-            try
+            // Mostrar ventana para seleccionar abogado
+            var seleccionarAbogado = new SeleccionarAbogadoWindow();
+
+
+
+            if (seleccionarAbogado.ShowDialog() == true)
             {
-                // 1. Crear la copia temporal para guardar
-                string rutaDocumento = WordDocumentHelper.CrearCopiaParaBD();
+                var abogado = seleccionarAbogado.AbogadoSeleccionado;
 
-                // 2. Liberar recursos COM para evitar bloqueo del archivo
-                WordDocumentHelper.ReiniciarDocumento();
-
-                // 3. Validar existencia del archivo temporal
-                if (string.IsNullOrEmpty(rutaDocumento) || !File.Exists(rutaDocumento))
+                try
                 {
-                    MessageBox.Show("No se encontró el documento para guardar.");
-                    return;
+                    // 1. Crear la copia temporal para guardar
+                    string rutaDocumento = WordDocumentHelper.CrearCopiaParaBD();
+
+                    // 2. Liberar recursos COM para evitar bloqueo del archivo
+                    WordDocumentHelper.ReiniciarDocumento();
+
+                    // 3. Validar existencia del archivo temporal
+                    if (string.IsNullOrEmpty(rutaDocumento) || !File.Exists(rutaDocumento))
+                    {
+                        MessageBox.Show("No se encontró el documento para guardar.");
+                        return;
+                    }
+
+                    // 4. Leer el archivo como bytes
+                    byte[] archivoBytes = File.ReadAllBytes(rutaDocumento);
+                    string nombreArchivo = seleccionarAbogado.TituloDocumento?.Trim();
+
+                    if (string.IsNullOrWhiteSpace(nombreArchivo))
+                    {
+                        MessageBox.Show("Por favor, ingrese un nombre válido para el documento.", "Nombre requerido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    DateTime fechaCreacion = DateTime.Now;
+                    TimeSpan horaCreacion = DateTime.Now.TimeOfDay;
+
+                    // 5. Obtener id del usuario actual
+                    int idUsuario = ObtenerIdUsuarioActual();
+                    string usuarioNombre = _usuarioActual;
+
+                    // 6. Guardar en la BD usando tu repositorio
+                    var repo = new InformeRepositorio();
+                    if (repo.GuardarInforme(nombreArchivo, archivoBytes, idUsuario, usuarioNombre, fechaCreacion, horaCreacion, abogado.Id, out string error))
+                    {
+                        MessageBox.Show("Documento guardado exitosamente.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al guardar el documento: " + error);
+                    }
                 }
-
-                // 4. Leer el archivo como bytes
-                byte[] archivoBytes = File.ReadAllBytes(rutaDocumento);
-                string nombreArchivo = Path.GetFileName(rutaDocumento);
-                DateTime fechaCreacion = DateTime.Now;
-                TimeSpan horaCreacion = DateTime.Now.TimeOfDay;
-
-                // 5. Obtener id del usuario actual
-                int idUsuario = ObtenerIdUsuarioActual();
-                string usuarioNombre = _usuarioActual;
-
-                // 6. Guardar en la BD usando tu repositorio
-                var repo = new InformeRepositorio();
-                if (repo.GuardarInforme(nombreArchivo, archivoBytes, idUsuario, usuarioNombre, fechaCreacion, horaCreacion, out string error))
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Documento guardado exitosamente.");
+                    MessageBox.Show("Error al guardar el documento: " + ex.Message);
                 }
-                else
-                {
-                    MessageBox.Show("Error al guardar el documento: " + error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al guardar el documento: " + ex.Message);
             }
         }
 

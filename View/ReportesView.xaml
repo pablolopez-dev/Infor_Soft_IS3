@@ -380,19 +380,19 @@
                     </Button>
                     <!-- Botón guardar en base de datos -->
                     <Button x:Name="btnGuardarEnBD"
-        Content="Guardar en BD"
-        Height="45"
-        Margin="0,15,0,0"
-        Background="#FFBF6408"
-        Foreground="White"
-        FontWeight="Bold"
-        BorderBrush="#BF6408"
-        BorderThickness="1"
-        Cursor="Hand"
-        FontSize="11"
-        FontFamily="Montserrat"
-        Click="btnGuardarEnBD_Click"
-        IsEnabled="False">
+                        Content="Guardar en BD"
+                        Height="45"
+                        Margin="0,15,0,0"
+                        Background="#FFBF6408"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        BorderBrush="#BF6408"
+                        BorderThickness="1"
+                        Cursor="Hand"
+                        FontSize="11"
+                        FontFamily="Montserrat"
+                        Click="btnGuardarEnBD_Click"
+                        IsEnabled="False">              
                         <!-- Deshabilitado al inicio -->
                         <Button.Style>
                             <Style TargetType="Button">
