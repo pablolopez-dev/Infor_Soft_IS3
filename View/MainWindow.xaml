@@ -88,40 +88,47 @@
                     </StackPanel>
                 </DockPanel>
 
-                <!-- CONTENIDO PRINCIPAL CON FRAME Y GRÁFICO -->
+                <!-- CONTENIDO PRINCIPAL CON GRÁFICO -->
                 <Border Grid.Row="1" Margin="15" Background="White"
                         CornerRadius="20" Padding="20" BorderBrush="#FFC107" BorderThickness="2">
 
-                    <StackPanel>
-                        <!-- ComboBox para filtrar -->
-                        <TextBlock Text="Filtrar por:"></TextBlock>
-                        <ComboBox x:Name="cmbFiltro" Width="100" Margin="-520,3,0,10"
-                                  SelectionChanged="cmbFiltro_SelectionChanged">
-                            <ComboBoxItem Content="Por Día"/>
-                            <ComboBoxItem Content="Por Mes"/>
-                            <ComboBoxItem Content="Por Año"/>
-                        </ComboBox>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                        <!-- Gráfico de barras -->
-                        <lvc:CartesianChart x:Name="graficoInformes" Height="350">
-                            <lvc:CartesianChart.Series>
-                                <lvc:ColumnSeries Title="Informes"
-                          Values="{Binding Valores}" 
-                          Fill="#FF3A1E03"
-                          StrokeThickness="0"/>
-                            </lvc:CartesianChart.Series>
+                        <!-- ComboBox de filtro -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Row="0">
+                            <TextBlock Text="Filtrar por:" VerticalAlignment="Center" Margin="0,0,10,0" />
+                            <ComboBox x:Name="cmbFiltro" Width="120" SelectionChanged="cmbFiltro_SelectionChanged">
+                                <ComboBoxItem Content="Por Día"/>
+                                <ComboBoxItem Content="Por Mes"/>
+                                <ComboBoxItem Content="Por Año"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Gráfico ocupa todo el espacio -->
+                        <lvc:CartesianChart x:Name="graficoInformes"
+                    Grid.Row="1"
+                    Series="{Binding SeriesCollection}"
+                    LegendLocation="Right"
+                    Background="White"
+                    Margin="0">
                             <lvc:CartesianChart.AxisX>
                                 <lvc:Axis Title="Fecha" Labels="{Binding Labels}" />
                             </lvc:CartesianChart.AxisX>
                             <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="Cantidad de Informes"/>
+                                <lvc:Axis Title="Cantidad" />
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
 
 
-                        <!-- Frame para navegación -->
-                        <Frame x:Name="MainContentFrame" NavigationUIVisibility="Hidden" Margin="0,20,0,0"/>
-                    </StackPanel>
+                        <!-- Frame de navegación opcional -->
+                        <Frame Grid.Row="2" x:Name="MainContentFrame" NavigationUIVisibility="Hidden" Margin="0,20,0,0"/>
+                    </Grid>
+
                 </Border>
             </Grid>
         </Grid>

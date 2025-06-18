@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System;
 using System.Windows.Controls;
 using Infor_Soft_WPF.Class.Repositorios;
+using System.ComponentModel;
+
 
 using System.Linq;
 
@@ -30,8 +32,14 @@ namespace Infor_Soft_WPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         private string _usuarioActual;
         private int _idUsuarioActual; // Cambiar a int (no string)
         public SeriesCollection SeriesCollection { get; set; }
@@ -114,11 +122,29 @@ namespace Infor_Soft_WPF
             };
 
             Labels = datos.Keys.ToList();
-            Valores = new ChartValues<int>(datos.Values);
+            var valores = new ChartValues<int>(datos.Values);
 
-            DataContext = null; // Refrescar el binding
-            DataContext = this;
+            SeriesCollection = new SeriesCollection
+{
+    new ColumnSeries
+    {
+        Title = "Informes",
+        Values = new ChartValues<int> {10, 20, 30},
+        Fill = new SolidColorBrush(Color.FromRgb(255, 193, 7)), // #FFC107
+        Stroke = new SolidColorBrush(Color.FromRgb(184, 134, 11)), // #B8860B
+        StrokeThickness = 2,
+        MaxColumnWidth = 50,
+        DataLabels = true
+    }
+};
+
+
+            // ¡NO restablecer DataContext a null!
+            OnPropertyChanged(nameof(SeriesCollection));
+            OnPropertyChanged(nameof(Labels));
         }
+
+
 
 
     }
