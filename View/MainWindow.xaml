@@ -3,8 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         Title="Dashboard - Sistema de Informes" Height="550" Width="950"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
         WindowStyle="None" AllowsTransparency="True">
+
     <Window.Resources>
         <Style x:Key="MenuButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#FF582E04"/>
@@ -34,38 +37,42 @@
     <Border CornerRadius="25" BorderBrush="#D7CCC8" BorderThickness="2" Background="WhiteSmoke">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition x:Name="SidebarColumn" Width="250"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- SIDEBAR -->
-            <StackPanel Background="#FF3A1E03" Grid.Column="0">
-                <TextBlock Text="INFORSOFT" FontSize="28" FontWeight="Bold"
-                           Foreground="White" Margin="20,30,20,40"
-                           HorizontalAlignment="Center"/>
+            <Border Grid.Column="0" Background="#FF3A1E03" Padding="0,30,0,0">
+                <StackPanel>
+                    <StackPanel Margin="20,0,20,40" HorizontalAlignment="Center">
+                        <Image Source="/Imagenes/OS.png" Width="100" Height="100" />
+                        <TextBlock x:Name="txtNombreUsuarioSidebar" Text="Bienvenido" FontSize="14" FontWeight="Bold" Foreground="White" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="txtJuzgadoSidebar" Text="" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
+                    </StackPanel>
 
-                <StackPanel Margin="10,0">
-                    <Button Content="📄 Reportes" Style="{StaticResource MenuButtonStyle}" Tag="Reportes" Margin="10" Click="Reportes_Click"/>
-                    <Button Content="👤 Usuarios" Style="{StaticResource MenuButtonStyle}" Tag="Usuarios" Margin="10"/>
-                    <Button Content="📂 Archivos" Click="AbrirBuscarInformes" Style="{StaticResource MenuButtonStyle}" Tag="Archivos" Margin="10"/>
-                    <Button Content="⚙️ Configuración" Style="{StaticResource MenuButtonStyle}" Tag="Configuracion" Margin="10"/>
+                    <StackPanel Margin="10,0">
+                        <Button Content="📄 Reportes" Style="{StaticResource MenuButtonStyle}" Tag="Reportes" Margin="10" Click="Reportes_Click"/>
+                        <Button Content="💰 Registros Comisivos" Style="{StaticResource MenuButtonStyle}" Tag="Cobertura" Margin="10" Click="Cobertura_Click"/>
+                        <Button Content="🧾 Facturación" Style="{StaticResource MenuButtonStyle}" Tag="Facturacion" Margin="10" Click="AbrirFactura_Click"/>
+                        <Button Content="📂 Archivos" Click="AbrirBuscarInformes" Style="{StaticResource MenuButtonStyle}" Tag="Archivos" Margin="10"/>
+                    </StackPanel>
+
+                    <Button Content="🚪 Cerrar Sesión"
+                            Margin="20,50,20,0"
+                            FontWeight="Bold" Height="45"
+                            Click="CerrarSesion_Click"
+                            Cursor="Hand"
+                            Background="#FF582E04" Foreground="White">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </StackPanel>
-
-                <Button Content="🚪 Cerrar Sesión"
-                        Margin="20,50,20,0"
-                        FontWeight="Bold" Height="45"
-                        Click="CerrarSesion_Click"
-                        Cursor="Hand"
-                        Background="#FF582E04" Foreground="White">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" CornerRadius="15">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
+            </Border>
 
             <!-- CONTENIDO -->
             <Grid Grid.Column="1">
@@ -75,16 +82,36 @@
                 </Grid.RowDefinitions>
 
                 <!-- HEADER con botones ventana -->
-                <DockPanel Grid.Row="0" Background="WhiteSmoke">
-                    <TextBlock Text="Sistema de Informes"
+                <DockPanel Grid.Row="0" Background="WhiteSmoke" LastChildFill="True">
+                    <!-- Botón para esconder/mostrar el sidebar -->
+                    <Button Content="☰"
+                            Width="40" Height="30"
+                            Click="ToggleSidebar_Click"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            FontSize="18"
+                            ToolTip="Mostrar/Ocultar menú"
+                            Cursor="Hand"/>
+
+                    <!-- Título centrado -->
+                    <TextBlock Text="Inforsoft"
                                FontSize="24" FontWeight="Bold"
-                               Foreground="DarkGoldenrod" Margin="20,0"
+                               Foreground="DarkGoldenrod"
+                               Margin="20,0"
                                VerticalAlignment="Center"/>
 
+                    <!-- Botones de ventana alineados a la derecha -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="🗕" Width="40" Height="30" Click="Minimizar_Click" Background="Transparent" BorderThickness="0"/>
-                        <Button Content="🗖" Width="40" Height="30" Click="Maximizar_Click" Background="Transparent" BorderThickness="0"/>
-                        <Button Content="❌" Width="40" Height="30" Click="Cerrar_Click" Background="Transparent" BorderThickness="0" Foreground="Red"/>
+                        <Button Content="🗕" Width="40" Height="30"
+                                Click="Minimizar_Click"
+                                Background="Transparent" BorderThickness="0" Cursor="Hand"/>
+                        <Button Content="🗖" Width="40" Height="30"
+                                Click="Maximizar_Click"
+                                Background="Transparent" BorderThickness="0" Cursor="Hand"/>
+                        <Button Content="❌" Width="40" Height="30"
+                                Click="Cerrar_Click"
+                                Background="Transparent" BorderThickness="0"
+                                Foreground="Red" Cursor="Hand"/>
                     </StackPanel>
                 </DockPanel>
 
@@ -99,23 +126,23 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <!-- ComboBox de filtro -->
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Row="0">
-                            <TextBlock Text="Filtrar por:" VerticalAlignment="Center" Margin="0,0,10,0" />
-                            <ComboBox x:Name="cmbFiltro" Width="120" SelectionChanged="cmbFiltro_SelectionChanged">
-                                <ComboBoxItem Content="Por Día"/>
-                                <ComboBoxItem Content="Por Mes"/>
-                                <ComboBoxItem Content="Por Año"/>
-                            </ComboBox>
-                        </StackPanel>
+                        <!-- ComboBox de filtro 
+                         <<StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Row="0">
+                             <<TextBlock Text="Filtrar por:" VerticalAlignment="Center" Margin="0,0,10,0" />
+                             <<ComboBox x:Name="cmbFiltro" Width="120" SelectionChanged="cmbFiltro_SelectionChanged">
+                                 <<ComboBoxItem Content="Por Día"/>
+                                 <<ComboBoxItem Content="Por Mes"/>
+                                 <<ComboBoxItem Content="Por Año"/>
+                             <</ComboBox>
+                        <</StackPanel> -->
 
                         <!-- Gráfico ocupa todo el espacio -->
                         <lvc:CartesianChart x:Name="graficoInformes"
-                    Grid.Row="1"
-                    Series="{Binding SeriesCollection}"
-                    LegendLocation="Right"
-                    Background="White"
-                    Margin="0">
+                                            Grid.Row="1"
+                                            Series="{Binding SeriesCollection}"
+                                            LegendLocation="Right"
+                                            Background="White"
+                                            Margin="0">
                             <lvc:CartesianChart.AxisX>
                                 <lvc:Axis Title="Fecha" Labels="{Binding Labels}" />
                             </lvc:CartesianChart.AxisX>
@@ -124,9 +151,8 @@
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
 
-
                         <!-- Frame de navegación opcional -->
-                        <Frame Grid.Row="2" x:Name="MainContentFrame" NavigationUIVisibility="Hidden" Margin="0,20,0,0"/>
+                        <Frame Grid.Row="1" x:Name="MainContentFrame" NavigationUIVisibility="Hidden" Margin="0,20,0,0"/>
                     </Grid>
 
                 </Border>

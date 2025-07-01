@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="Infor_Soft_WPF.Views.CoberturaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20">
+        <StackPanel>
+
+            <!-- Título -->
+            <TextBlock Text="Registro de Oficios Comisivos"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#FF582E04"
+                       Margin="0,0,0,20"/>
+
+            <!-- DATOS DEL OFICIO -->
+            <GroupBox Header="Datos del Oficio" Margin="0,0,0,15">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   
+
+                    <TextBlock Text="Fecha de notificación:" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                    <DatePicker x:Name="dpFechaSolicitud" Grid.Row="1" Margin="131,0,42,5" Grid.ColumnSpan="2"/>
+                </Grid>
+            </GroupBox>
+
+            <!-- ACTIVIDADES -->
+            <GroupBox Header="Actividades" Margin="0,0,0,15">
+                <StackPanel Margin="10">
+
+                    <!-- Selección de Destino -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Destino:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <ComboBox x:Name="cmbDestino" Width="300">
+                            <ComboBoxItem Content="De Ciudad del Este a Ciudad del Este (26.907 Gs)"/>
+                            <ComboBoxItem Content="De Ciudad del Este a Franco (25.000 Gs)"/>
+                            <ComboBoxItem Content="De Ciudad del Este a Hernandarias (28.000 Gs)"/>
+                            <ComboBoxItem Content="De Ciudad del Este a Minga Guazú (120.000 Gs)"/>
+                            <ComboBoxItem Content="De Ciudad del Este a Itakyry (400.000 Gs)"/>
+                            <ComboBoxItem Content="De Ciudad del Este a Santa Rita (250.000 Gs)"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Botón para agregar -->
+                    <Button Content="Agregar Actividad"
+                            Background="#FF582E04"
+                            Foreground="White"
+                            Width="150"
+                            Margin="0,0,0,10"
+                            Click="AgregarActividad_Click"/>
+
+                    <!-- Tabla de actividades -->
+                    <DataGrid x:Name="dgActividades"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="True"
+                              Height="300"
+                              HeadersVisibility="Column"
+                              AlternatingRowBackground="#FFF9F4ED"
+                              GridLinesVisibility="Horizontal"
+                              Margin="0,10,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="N°" Binding="{Binding Numero}" Width="50"/>
+                            <DataGridTextColumn Header="Destino" Binding="{Binding Destino}" Width="200"/>
+                            <DataGridTextColumn Header="Monto" Binding="{Binding Monto}" Width="150"/>
+                            <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha}" Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- BOTÓN PARA GENERAR WORD -->
+            <Button Content="Generar Registro Word"
+                    Background="#FF582E04"
+                    Foreground="White"
+                    FontSize="16"
+                    Height="45"
+                    Margin="0,10,0,0"
+                    Width="192"
+                    Click="GenerarPDF_Click"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

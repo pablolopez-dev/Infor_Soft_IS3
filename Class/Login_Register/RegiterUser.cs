@@ -11,7 +11,7 @@ namespace Infor_Soft_WPF.Class.Login_Register
     {
         private string connectionString = "server=localhost;user=root;password=;database=inforsoft;port=3306";
 
-        public int RegistrarUsuario(string usuario, int matricula, string correo, string contraseña)
+        public int RegistrarUsuario(string usuario, int matricula, string nombre, string correo, string contraseña)
         {
             int nuevoId = -1;
 
@@ -34,9 +34,10 @@ namespace Infor_Soft_WPF.Class.Login_Register
                 }
 
                 // Insertar nuevo usuario
-                string insertarQuery = "INSERT INTO usuarios (usuario, matricula, correo, contraseña) VALUES (@usuario, @matricula, @correo, @contraseña)";
+                string insertarQuery = "INSERT INTO usuarios (usuario, matricula, nombre, correo, contraseña) VALUES (@usuario, @matricula, @nombre, @correo, @contraseña)";
                 using (var cmd = new MySqlCommand(insertarQuery, conn))
                 {
+                    cmd.Parameters.AddWithValue("@nombre", nombre);
                     cmd.Parameters.AddWithValue("@usuario", usuario);
                     cmd.Parameters.AddWithValue("@matricula", matricula);
                     cmd.Parameters.AddWithValue("@correo", correo);

@@ -135,7 +135,7 @@
                 <StackPanel Margin="20" HorizontalAlignment="Stretch">
 
                     <!-- Título -->
-                    <Button Content="⟵ Volver a Inicio"
+                    <Button Content="⟵ Volver"
         Width="100"
         Height="30"
         FontSize="16"
@@ -174,7 +174,7 @@
                                FontSize="26"
                                FontWeight="Bold"
                                Foreground="White"
-                               Margin="260,-30,0,30"
+                               Margin="580,-30,0,30"
                                FontFamily="Montserrat"/>
 
                     <!-- ComboBox tipo resolución -->
@@ -392,7 +392,7 @@
                         FontSize="11"
                         FontFamily="Montserrat"
                         Click="btnGuardarEnBD_Click"
-                        IsEnabled="False">              
+                        IsEnabled="False">
                         <!-- Deshabilitado al inicio -->
                         <Button.Style>
                             <Style TargetType="Button">

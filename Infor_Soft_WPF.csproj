@@ -5,10 +5,13 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Imagenes\Logo_OS_5.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Imagenes\Compromiso.jpg" />
     <None Remove="Imagenes\lock.png" />
+    <None Remove="Imagenes\logo_pj.png" />
     <None Remove="Imagenes\OS.png" />
     <None Remove="Imagenes\user.png" />
   </ItemGroup>
@@ -26,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Imagenes\Logo_OS_5.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Model\" />
     <Folder Include="ViewModel\" />
   </ItemGroup>
@@ -33,12 +40,21 @@
   <ItemGroup>
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="MySql.Data" Version="9.3.0" />
+    <PackageReference Include="PDFsharp-MigraDoc-GDI" Version="6.2.0" />
+    <PackageReference Include="QuestPDF" Version="2025.5.1" />
+    <PackageReference Include="Xceed.Words.NET" Version="5.0.25228.6154" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Imagenes\Compromiso.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Imagenes\lock.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Content Include="Imagenes\logo_pj.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Imagenes\OS.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

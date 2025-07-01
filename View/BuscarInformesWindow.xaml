@@ -24,27 +24,26 @@
                       SelectionChanged="cmbAbogados_SelectionChanged"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Margin="350,-5,0,10">
-            <TextBlock Text="Buscar Abg.:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBox x:Name="txtBuscarAbogado" Width="200" TextChanged="TxtBuscarAbogado_TextChanged"/>
-        </StackPanel>
-
+       
         <!-- Lista de informes -->
         <DataGrid x:Name="dgInformes"
-                  Grid.Row="1"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  SelectionMode="Single"
-                  HeadersVisibility="Column"
-                  Margin="0,10,0,0">
+          Grid.Row="1"
+          AutoGenerateColumns="False"
+          IsReadOnly="True"
+          SelectionMode="Single"
+          HeadersVisibility="Column"
+          Margin="0,10,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                 <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="*"/>
+                <DataGridTextColumn Header="Autos Caratulados" Binding="{Binding AutosCaratulados}" Width="*"/>
+                <!-- NUEVO -->
                 <DataGridTextColumn Header="Fecha" Binding="{Binding FechaCreacion}" Width="120"/>
                 <DataGridTextColumn Header="Hora" Binding="{Binding HoraCreacion}" Width="80"/>
                 <DataGridTextColumn Header="Usuario" Binding="{Binding Usuario}" Width="100"/>
             </DataGrid.Columns>
         </DataGrid>
+
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
             <Button Content="Ver Informe" Width="100" Margin="0,0,10,0" Click="BtnVerInforme_Click"/>
             <Button Content="Descargar" Width="100" Click="BtnDescargarInforme_Click"/>

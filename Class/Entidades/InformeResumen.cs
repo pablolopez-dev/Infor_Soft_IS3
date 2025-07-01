@@ -13,6 +13,10 @@ namespace Infor_Soft_WPF.Class.Entidades
         public string Usuario { get; set; }
         public DateTime FechaCreacion { get; set; }
         public TimeSpan HoraCreacion { get; set; }
+        public string AbogadoNombre { get; set; }
+
+        public string AutosCaratulados { get; set; } // ← NUEVO
+
     }
 
 }

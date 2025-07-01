@@ -3,6 +3,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows;
 using Infor_Soft_WPF.Class.Login_Register; // Ajusta el namespace a tu proyecto
+using Infor_Soft_WPF.Class.BD;
+using MySql.Data.MySqlClient;
+using System;
 
 namespace Infor_Soft_WPF.View
 {
@@ -25,13 +28,53 @@ namespace Infor_Soft_WPF.View
             return !regex.IsMatch(text);
         }
 
+        public int ObtenerIdMatriculaPorNumero(string numeroMatricula)
+        {
+            int idMatricula = -1;
+            string query = "SELECT matricula_id FROM matricula WHERE numero_matricula = @numero";
+
+            using (var db = new BD_CONN())
+            {
+                var conn = db.GetConnection();
+                db.OpenConnection();
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@numero", numeroMatricula);
+
+                    var result = cmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        idMatricula = Convert.ToInt32(result);
+                    }
+                }
+                db.CloseConnection();
+            }
+
+            return idMatricula;
+        }
+
+
+
+
+
         // Evento del botón Registrar
         private void btnRegistrar_Click(object sender, RoutedEventArgs e)
         {
+            string nombre = txtNombre.Text.Trim();
             string usuario = txtUsuario.Text.Trim();
             string correo = txtCorreo.Text.Trim();
             string matriculaText = txtMatricula.Text.Trim();
             string password = txtPassword.Password;
+            int idMatricula = ObtenerIdMatriculaPorNumero(matriculaText);
+
+            if (idMatricula == -1)
+            {
+                MessageBox.Show("La matrícula no está registrada en la base de datos.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+
 
             // Validaciones simples
             if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(correo) ||
@@ -50,7 +93,7 @@ namespace Infor_Soft_WPF.View
             // Instanciar clase para registro y llamar método
             RegisterUser registerUser = new RegisterUser();
 
-            int nuevoIdUsuario = registerUser.RegistrarUsuario(usuario, matricula, correo, password);
+            int nuevoIdUsuario = registerUser.RegistrarUsuario(usuario, idMatricula, nombre, correo, password);
 
             if (nuevoIdUsuario != -1)
             {

@@ -3,10 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      mc:Ignorable="d" d:DesignWidth="800"
       Background="#FF582E04"
-      Title="Page1">
+      Title="Page1" Height="535">
 
     <Window.Resources>
         <!-- Estilo de botón redondeado -->
@@ -33,7 +32,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="40,10,40,10">
+    <Grid Margin="40,10,40,-68">
         <Grid.RowDefinitions>
             <RowDefinition Height="167*"/>
             <RowDefinition Height="23*"/>
@@ -46,7 +45,7 @@
                 VerticalAlignment="Top"
                 HorizontalAlignment="Center"
                 Width="420"
-                Padding="30" Height="450" Grid.RowSpan="3" Margin="0,-10,0,0">
+                Padding="30" Height="489" Grid.RowSpan="2" Margin="0,-10,0,0">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#FF582E04" Offset="0"/>
@@ -61,7 +60,7 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <StackPanel>
+            <StackPanel Margin="0,0,0,-45">
                 <Button Content="⟵ Volver"
         Width="66"
         Height="22"
@@ -105,6 +104,15 @@
                            FontFamily="Montserrat"/>
 
                 <!-- Usuario -->
+                <!-- Nombre -->
+                <TextBlock Text="Nombre" FontFamily="Montserrat" Foreground="White"/>
+                <TextBox x:Name="txtNombre"
+         Height="35"
+         Padding="10"
+         Margin="0,5,0,15"
+         FontFamily="Montserrat"
+         BorderBrush="#ccc"/>
+
                 <TextBlock Text="Usuario" FontFamily="Montserrat" Foreground="White"/>
                 <TextBox x:Name="txtUsuario"
                          Height="35"

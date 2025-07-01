@@ -3,13 +3,11 @@ using Infor_Soft_WPF.Class.Entidades;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Infor_Soft_WPF.Class.Repositorios
 {
     public class InformeRepositorio
     {
-
         public static class Conexion
         {
             public static string Cadena()
@@ -23,17 +21,48 @@ namespace Infor_Soft_WPF.Class.Repositorios
             }
         }
 
+        public Dictionary<string, int> ObtenerCantidadInformesPorUsuario()
+        {
+            var resultados = new Dictionary<string, int>();
+
+            using (var conexion = Conexion.ObtenerConexion())
+            {
+                conexion.Open();
+
+                string query = @"
+            SELECT u.nombre AS usuario, COUNT(i.id_informe) AS cantidad
+            FROM informes i
+            INNER JOIN usuarios u ON u.id_usuario = i.id_usuario
+            GROUP BY u.nombre
+            ORDER BY cantidad DESC";
+
+                using (var cmd = new MySqlCommand(query, conexion))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string usuario = reader.GetString("usuario");
+                            int cantidad = reader.GetInt32("cantidad");
+                            resultados[usuario] = cantidad;
+                        }
+                    }
+                }
+            }
+
+            return resultados;
+        }
+
+
         public bool GuardarInforme(string nombreArchivo, byte[] contenidoArchivo, int idUsuario, string usuario, DateTime fecha, TimeSpan hora, int idAbogado, out string error)
         {
             error = null;
-
 
             try
             {
                 using (var db = new BD_CONN())
                 {
-                    db.OpenConnection(); // ← Esto abre la conexión correctamente
-
+                    db.OpenConnection();
                     var conn = db.GetConnection();
 
                     string query = @"INSERT INTO informes 
@@ -74,10 +103,16 @@ namespace Infor_Soft_WPF.Class.Repositorios
                 db.OpenConnection();
                 var conn = db.GetConnection();
 
-                string query = @"SELECT id_informe, titulo_docu, usuario, fecha_creacion, hora_creacion 
-                         FROM informes
-                         WHERE id_abogado = @idAbogado
-                         ORDER BY fecha_creacion DESC, hora_creacion DESC";
+                string query = @"
+                    SELECT i.id_informe, i.titulo_docu, i.autos_caratulados, 
+                           i.fecha_creacion, i.hora_creacion, 
+                           u.nombre AS usuario_nombre,
+                           a.nombre AS abogado_nombre
+                    FROM informes i
+                    INNER JOIN usuarios u ON u.id_usuario = i.id_usuario
+                    INNER JOIN abogados a ON a.id_abogado = i.id_abogado
+                    WHERE i.id_abogado = @idAbogado
+                    ORDER BY i.fecha_creacion DESC";
 
                 using (var cmd = new MySqlCommand(query, conn))
                 {
@@ -91,7 +126,61 @@ namespace Infor_Soft_WPF.Class.Repositorios
                             {
                                 Id = reader.GetInt32("id_informe"),
                                 Titulo = reader.GetString("titulo_docu"),
-                                Usuario = reader.GetString("usuario"),
+                                AutosCaratulados = reader.IsDBNull(reader.GetOrdinal("autos_caratulados"))
+                                    ? "" : reader.GetString("autos_caratulados"),
+                                Usuario = reader.GetString("usuario_nombre"),
+                                AbogadoNombre = reader.GetString("abogado_nombre"),
+                                FechaCreacion = reader.GetDateTime("fecha_creacion"),
+                                HoraCreacion = reader.GetTimeSpan("hora_creacion")
+                            });
+                        }
+                    }
+                }
+
+                db.CloseConnection();
+            }
+
+            return lista;
+        }
+
+        // NUEVO: Método para buscar informes por nombre del abogado (con LIKE)
+        public List<InformeResumen> BuscarInformesPorNombreAbogado(string nombreAbogado)
+        {
+            var lista = new List<InformeResumen>();
+
+            using (var db = new BD_CONN())
+            {
+                db.OpenConnection();
+                var conn = db.GetConnection();
+
+                string query = @"
+                    SELECT i.id_informe, i.titulo_docu, i.autos_caratulados, 
+                           i.fecha_creacion, i.hora_creacion, 
+                           u.nombre AS usuario_nombre,
+                           a.nombre AS abogado_nombre
+                    FROM informes i
+                    INNER JOIN usuarios u ON u.id_usuario = i.id_usuario
+                    INNER JOIN abogados a ON a.id_abogado = i.id_abogado
+                    INNER JOIN registros_comisivos r a ON r.id_usuario = i.id_usuario
+                    WHERE a.nombre LIKE @nombreAbogado
+                    ORDER BY i.fecha_creacion DESC";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@nombreAbogado", "%" + nombreAbogado + "%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lista.Add(new InformeResumen
+                            {
+                                Id = reader.GetInt32("id_informe"),
+                                Titulo = reader.GetString("titulo_docu"),
+                                AutosCaratulados = reader.IsDBNull(reader.GetOrdinal("autos_caratulados"))
+                                    ? "" : reader.GetString("autos_caratulados"),
+                                Usuario = reader.GetString("usuario_nombre"),
+                                AbogadoNombre = reader.GetString("abogado_nombre"),
                                 FechaCreacion = reader.GetDateTime("fecha_creacion"),
                                 HoraCreacion = reader.GetTimeSpan("hora_creacion")
                             });
@@ -121,7 +210,6 @@ namespace Infor_Soft_WPF.Class.Repositorios
                 }
             }
         }
-
 
         public byte[] ObtenerInformePorId(int idInforme, out string titulo)
         {
@@ -160,11 +248,10 @@ namespace Infor_Soft_WPF.Class.Repositorios
             {
                 conexion.Open();
                 var cmd = new MySqlCommand(@"
-            SELECT DATE(fecha_creacion) as dia, COUNT(*) as cantidad
-            FROM informes
-            GROUP BY dia
-            ORDER BY dia DESC
-        ", conexion);
+                    SELECT DATE(fecha_creacion) as dia, COUNT(*) as cantidad
+                    FROM informes
+                    GROUP BY dia
+                    ORDER BY dia DESC", conexion);
 
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -184,16 +271,15 @@ namespace Infor_Soft_WPF.Class.Repositorios
             {
                 conexion.Open();
                 var cmd = new MySqlCommand(@"
-            SELECT DATE_FORMAT(fecha_creacion, '%Y-%m') as mes, COUNT(*) as cantidad
-            FROM informes
-            GROUP BY mes
-            ORDER BY mes DESC
-        ", conexion);
+                    SELECT DATE_FORMAT(fecha_creacion, '%Y-%m') as mes, COUNT(*) as cantidad
+                    FROM informes
+                    GROUP BY mes
+                    ORDER BY mes DESC", conexion);
 
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    string mes = reader["mes"].ToString(); // ejemplo: "2025-06"
+                    string mes = reader["mes"].ToString();
                     resultados[mes] = Convert.ToInt32(reader["cantidad"]);
                 }
             }
@@ -207,11 +293,10 @@ namespace Infor_Soft_WPF.Class.Repositorios
             {
                 conexion.Open();
                 var cmd = new MySqlCommand(@"
-            SELECT YEAR(fecha_creacion) as anio, COUNT(*) as cantidad
-            FROM informes
-            GROUP BY anio
-            ORDER BY anio DESC
-        ", conexion);
+                    SELECT YEAR(fecha_creacion) as anio, COUNT(*) as cantidad
+                    FROM informes
+                    GROUP BY anio
+                    ORDER BY anio DESC", conexion);
 
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -222,7 +307,5 @@ namespace Infor_Soft_WPF.Class.Repositorios
             }
             return resultados;
         }
-
-
     }
 }

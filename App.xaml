@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:Infor_Soft_WPF"
              StartupUri="View/LoginView.xaml">
     <Application.Resources>
-         
+        <BitmapImage x:Key="AppIcon" UriSource="\Imagenes\Logo_OS_5.ico"/>
     </Application.Resources>
 </Application>
+
+    
