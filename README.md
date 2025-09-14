@@ -49,7 +49,7 @@ Desarrollado como proyecto académico para la **Universidad Nacional del Este**,
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/pablolopez-dev/Infor_Soft_IS3.git
+git clone https://github.com/pablolopez-dev/Sistema-de-generaci-n-de-informes-para-Ujieres.git
 
 # Abrir en Visual Studio
 # Compilar y ejecutar el proyecto
