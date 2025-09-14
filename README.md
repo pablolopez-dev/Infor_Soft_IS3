@@ -59,7 +59,7 @@ git clone https://github.com/pablolopez-dev/Sistema-de-generaci-n-de-informes-pa
 
 - Windows 7/8/10/11
 - .NET Framework 4.7.2 o superior
-- Visual Studio 2019 o superior (para desarrollo)
+- Visual Studio 2022
 
 ## Estado del Proyecto
 
